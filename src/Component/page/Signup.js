@@ -1,22 +1,35 @@
-import {React,useState} from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {React , useState, useEffect} from "react";
+import { BrowserRouter as Router, Switch, Route , useHistory } from "react-router-dom";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch,useSelector } from "react-redux";
 import { setUsersData,setLoginUsersData,setLoginData } from "../../app/reducer";
 const Signup = () => {
     const user = useSelector((state) => state.app.Users);
+    const loginState = useSelector((state) => state.app.LoginDetails.login);
     const [signup,setSignup] = useState({name:null,email:null,password:null, picture: "assets/images/users/avatar-1.jpg"})
     const [error,setError] = useState({password:null,email:null,password:null,connect:null});
     const [passwordShow,setPasswordShow] = useState(false);
+    const history = useHistory();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log(loginState);
+        if (loginState) {
+          // Redirect to another page when login state is true
+          history.push("/dashboard"); // Replace "/dashboard" with your desired route
+        }
+    }, [loginState, history]);
+
     const handleChange = (event) => {
         setSignup({...signup,[event.target.name]: event.target.value});
     }
-
+    
     const handleSingup=(e)=>{
          e.preventDefault();
          verifyErrors();
          var errorCheck = Object.entries(error).filter(([key, value]) => value !== null)
+          console.log(errorCheck)
+          console.log(signup);
          if(errorCheck.length ==0){
             dispatch(setUsersData(signup));
             dispatch(setLoginUsersData(signup));
@@ -88,7 +101,7 @@ const Signup = () => {
                                 <div className="p-2 mt-4">
                                     <form className="needs-validation" novalidate onSubmit={handleSingup}>
                                     <div className="mb-3">
-                                            <label for="username" className="form-label">Username <span className="text-danger">*</span></label>
+                                            <label for="username" className="form-label">Name <span className="text-danger">*</span></label>
                                             <input type="text" className="form-control" name="name" onChange={handleChange} id="username" placeholder="Enter username" required/>
                                             <div className="invalid-feedback">
                                                 Please enter username

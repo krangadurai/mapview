@@ -27,7 +27,7 @@ const Login = () => {
       // Redirect to another page when login state is true
       history.push("/dashboard"); // Replace "/dashboard" with your desired route
     }
-  }, [loginState,, history]);
+  }, [loginState, history]);
 
   
   const handleOAuthSuccess = (response) => {
